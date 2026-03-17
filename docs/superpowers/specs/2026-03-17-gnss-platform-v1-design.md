@@ -1,8 +1,22 @@
 # GNSS PC Tool Platform V1 Design (Launcher + Local Apps)
 
 Date: 2026-03-17
-Status: Draft for user review
+Status: V1 foundation implemented
 Owner: weifeng + codex
+
+## Implementation Status
+
+Implementation status (V1 foundation): COMPLETE
+
+Delivered:
+- `pc-gnssconnect-terminal` initialized from `pc-nrfconnect-serial-terminal`.
+- Command template state and UI send flow added.
+- GNSS export filename convention (`gnss-terminal-*.txt`) implemented.
+- App quality checks (`npm run check`) and tests (`npm test`) pass.
+
+Remaining before operational sign-off:
+- Manual launcher GUI smoke run on macOS.
+- Hardware-in-the-loop serial validation with a real GNSS device.
 
 ## 1. Context
 
@@ -191,3 +205,8 @@ Phase 3 (V2 roadmap):
 - Private app source strategy and release pipeline.
 - Full cross-platform support (Windows later).
 - GNSS protocol decomposition for V2 (NMEA/RTCM/raw observations).
+- V2 queue:
+  - NMEA parser pane (RMC/GGA/GSV) with fix-quality indicators.
+  - Raw observation quality summary (C/N0 trends, satellite health snapshots).
+  - Device upgrade workflow (firmware package select + progress + rollback guardrails).
+  - Differential data injection workflow (RTCM source input and forwarding controls).
