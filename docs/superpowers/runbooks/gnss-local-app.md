@@ -76,3 +76,15 @@ Expected:
 If app is missing:
 - Verify `~/.nrfconnect-apps/local/pc-gnssconnect-terminal` exists.
 - Verify linked folder has a valid `package.json` with matching `name`.
+
+## Verification
+
+Date: 2026-03-17
+
+Automated checks completed in `pc-gnssconnect-terminal`:
+- `npm run check` passed.
+- `npm test` passed (3 suites, 5 tests).
+
+Known gaps:
+- Launcher GUI smoke run (app list visibility and open flow) not executed in this terminal-only validation pass.
+- Hardware-in-the-loop serial smoke test still required with a real GNSS device on macOS.
