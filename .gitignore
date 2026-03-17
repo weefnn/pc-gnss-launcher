@@ -8,3 +8,4 @@
 /resources/react
 /resources/prefetched
 .DS_Store
+.worktrees
