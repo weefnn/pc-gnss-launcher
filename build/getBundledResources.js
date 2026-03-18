@@ -15,5 +15,10 @@ exports.default = async () => {
         recursive: true,
     });
 
+    // GNSS launcher default: do not depend on Nordic prefetch resources.
+    if (process.env.PCGNSS_BUNDLE_NORDIC !== '1') {
+        return;
+    }
+
     await Promise.allSettled([getJlink(), bundleApps()]);
 };
