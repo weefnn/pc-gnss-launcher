@@ -12,7 +12,7 @@ import {
     getLastUpdateCheckDate,
     setLastUpdateCheckDate,
 } from '../../../common/persistedStore';
-import { OFFICIAL, type SourceName } from '../../../common/sources';
+import { LOCAL, OFFICIAL, type SourceName } from '../../../common/sources';
 import { type Progress as AppInstallProgress } from '../../../ipc/appInstallProgress';
 import {
     type App,
@@ -287,10 +287,42 @@ export const {
     updateDownloadableAppStarted,
 } = slice.actions;
 
+const appPriority = (app: DisplayedApp) => {
+    if (isInstalled(app) && app.source === LOCAL) {
+        return 4;
+    }
+
+    if (isInstalled(app)) {
+        return 3;
+    }
+
+    if (app.source === LOCAL) {
+        return 2;
+    }
+
+    return 1;
+};
+
+const deduplicateAppsByName = (apps: DisplayedApp[]) => {
+    const preferredAppsByName = new Map<string, DisplayedApp>();
+
+    apps.forEach(app => {
+        const existingApp = preferredAppsByName.get(app.name);
+        if (
+            existingApp == null ||
+            appPriority(app) > appPriority(existingApp)
+        ) {
+            preferredAppsByName.set(app.name, app);
+        }
+    });
+
+    return [...preferredAppsByName.values()];
+};
+
 export const getAllApps = (state: RootState): DisplayedApp[] => {
     const { downloadableApps, localApps } = state.apps;
 
-    return [...localApps, ...downloadableApps];
+    return deduplicateAppsByName([...localApps, ...downloadableApps]);
 };
 
 export const getNoAppsExist = (state: RootState) =>

@@ -16,19 +16,10 @@ import About from './features/about/About';
 import AppleSiliconAlert from './features/appleSilicon/AppleSiliconAlert';
 import AppleSiliconDialog from './features/appleSilicon/AppleSiliconDialog';
 import AppList from './features/apps/AppList';
-import JLinkUpdateDialog from './features/jlinkUpdate/JLinkUpdateDialog';
-import JLinkUpdateProgressDialog from './features/jlinkUpdate/JLinkUpdateProgressDialog';
 import UpdateAvailableDialog from './features/launcherUpdate/UpdateAvailableDialog';
 import UpdateProgressDialog from './features/launcherUpdate/UpdateProgressDialog';
 import DropZoneForLocalApps from './features/localAppInstall/DropZoneForLocalApps';
-import ProxyErrorDialog from './features/proxyLogin/ProxyErrorDialog';
-import ProxyLoginDialog from './features/proxyLogin/ProxyLoginDialog';
-import QuickStartDialog from './features/quickstart/QuickstartDialog';
 import Settings from './features/settings/Settings';
-import AddLegacySourceWarning from './features/sources/AddLegacySourceWarning';
-import DeprecatedSourcesDialog from './features/sources/DeprecatedSourcesDialog';
-import MissingTokenWarning from './features/sources/MissingTokenWarning';
-import TelemetryDialog from './features/telemetry/TelemetryDialog';
 import ErrorBoundaryLauncher from './util/ErrorBoundaryLauncher';
 import UpdateChannelName from './util/UpdateChannelName';
 
@@ -97,16 +88,7 @@ export default () => {
             <RootErrorDialog />
             <UpdateAvailableDialog />
             <UpdateProgressDialog />
-            <TelemetryDialog />
-            <ProxyLoginDialog />
-            <ProxyErrorDialog />
             <AppleSiliconDialog />
-            <QuickStartDialog />
-            <DeprecatedSourcesDialog />
-            <AddLegacySourceWarning />
-            <MissingTokenWarning />
-            <JLinkUpdateDialog />
-            <JLinkUpdateProgressDialog />
 
             <UpdateChannelName />
         </ErrorBoundaryLauncher>

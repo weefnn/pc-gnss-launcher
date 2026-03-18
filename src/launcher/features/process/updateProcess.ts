@@ -11,48 +11,25 @@ import {
 
 import type { AppThunk } from '../../store';
 import { downloadLatestAppInfos as downloadLatestAppInfosEffect } from '../apps/appsEffects';
-import { checkForJLinkUpdate as checkForJLinkUpdateEffect } from '../jlinkUpdate/jlinkUpdateEffects';
 import { checkForLauncherUpdate as checkForLauncherUpdateEffect } from '../launcherUpdate/launcherUpdateEffects';
-import { getIsErrorVisible as getIsProxyErrorShown } from '../proxyLogin/proxyLoginSlice';
 import { showUpdateCheckComplete } from '../settings/settingsSlice';
 import {
-    INTERRUPT_PROCESS,
     type ProcessStep,
     runRemainingProcessStepsSequentially,
 } from './thunkProcess';
 
-const checkForJLinkUpdate: ProcessStep = async dispatch => {
-    try {
-        const { isUpdateAvailable } = await dispatch(
-            checkForJLinkUpdateEffect({ checkOnline: true }),
-        );
-
-        if (isUpdateAvailable) {
-            return INTERRUPT_PROCESS;
-        }
-    } catch (e) {
-        dispatch(ErrorDialogActions.showDialog(describeError(e)));
-    }
-};
-
 const checkForLauncherUpdate: ProcessStep = async dispatch => {
     if (process.env.NODE_ENV !== 'development') {
-        const { isUpdateAvailable } = await dispatch(
-            checkForLauncherUpdateEffect(),
-        );
-
-        if (isUpdateAvailable) {
-            return INTERRUPT_PROCESS;
-        }
+        await dispatch(checkForLauncherUpdateEffect());
     }
 };
 
 const downloadLatestAppInfo =
     (showDialogOnComplete: boolean): ProcessStep =>
-    async (dispatch, getState) => {
+    async dispatch => {
         try {
             await dispatch(downloadLatestAppInfosEffect());
-            if (showDialogOnComplete && !getIsProxyErrorShown(getState())) {
+            if (showDialogOnComplete) {
                 dispatch(showUpdateCheckComplete());
             }
         } catch (error) {
@@ -70,7 +47,6 @@ export const startUpdateProcess =
     (showDialogOnComplete: boolean): AppThunk =>
     dispatch => {
         currentProcessSteps = [
-            checkForJLinkUpdate,
             checkForLauncherUpdate,
             downloadLatestAppInfo(showDialogOnComplete),
         ];

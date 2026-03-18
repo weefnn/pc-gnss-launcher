@@ -7,9 +7,7 @@
 import { ErrorDialogActions } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import * as appInstallProgress from '../../ipc/appInstallProgress';
-import * as installJlink from '../../ipc/jlinkProgress';
 import * as launcherUpdateProgress from '../../ipc/launcherUpdateProgress';
-import * as proxyLogin from '../../ipc/proxyLogin';
 import * as showErrorDialog from '../../ipc/showErrorDialog';
 import {
     addDownloadableApps,
@@ -17,13 +15,11 @@ import {
     resetAppInstallProgress,
     updateAppInstallProgress,
 } from '../features/apps/appsSlice';
-import { updateProgress as updateJLinkProgress } from '../features/jlinkUpdate/jlinkUpdateSlice';
 import {
     reset,
     startDownload,
     updateDownloading,
 } from '../features/launcherUpdate/launcherUpdateSlice';
-import { loginRequestedByServer } from '../features/proxyLogin/proxyLoginSlice';
 import type { AppDispatch } from '../store';
 
 export default (dispatch: AppDispatch) => {
@@ -42,10 +38,6 @@ export default (dispatch: AppDispatch) => {
         dispatch(ErrorDialogActions.showDialog(errorMessage));
     });
 
-    proxyLogin.forMain.registerRequestProxyLogin((requestId, authInfo) => {
-        dispatch(loginRequestedByServer({ requestId, authInfo }));
-    });
-
     launcherUpdateProgress.forMain.registerUpdateStarted(() => {
         dispatch(startDownload());
     });
@@ -54,8 +46,5 @@ export default (dispatch: AppDispatch) => {
     });
     launcherUpdateProgress.forMain.registerUpdateFinished(() => {
         dispatch(reset());
-    });
-    installJlink.forMain.registerUpdateJLinkProgress(update => {
-        dispatch(updateJLinkProgress(update));
     });
 };

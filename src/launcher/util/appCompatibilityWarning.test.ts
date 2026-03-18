@@ -109,6 +109,14 @@ describe('check compatibility of an app with the launcher', () => {
                 nrfutil: { device: [nrfutilDeviceVersion] },
             });
 
+        beforeEach(() => {
+            process.env.PCTOOL_DISABLE_JLINK = '0';
+        });
+
+        afterEach(() => {
+            delete process.env.PCTOOL_DISABLE_JLINK;
+        });
+
         it('Calls resolveModuleVersion exactly once per version of nrfutil-device', async () => {
             jest.mocked(NrfutilSandbox.create).mockResolvedValue({
                 // @ts-expect-error -- I do not understand et how to fix this TypeScript error, but this is only a test, test ¯\_(ツ)_/¯
@@ -127,6 +135,23 @@ describe('check compatibility of an app with the launcher', () => {
             await checkJLinkRequirements(app('3.0.2'), '5.0.0');
 
             expect(mockedGetSandbox).toBeCalledTimes(3);
+        });
+    });
+
+    describe('when J-Link checks are disabled', () => {
+        const app = (nrfutilDeviceVersion: string) =>
+            createDownloadableTestApp(undefined, {
+                nrfutil: { device: [nrfutilDeviceVersion] },
+            });
+
+        it('skips checking J-Link compatibility', async () => {
+            delete process.env.PCTOOL_DISABLE_JLINK;
+            jest.mocked(NrfutilSandbox.create).mockClear();
+
+            expect(await checkJLinkRequirements(app('3.0.0'), '5.0.0')).toMatchObject(
+                undecidedCheck,
+            );
+            expect(NrfutilSandbox.create).not.toHaveBeenCalled();
         });
     });
 

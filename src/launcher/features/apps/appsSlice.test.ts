@@ -10,9 +10,11 @@ import { type AppSpec } from '../../../ipc/apps';
 import {
     createDownloadableTestApp,
     createLocalTestApp,
+    createUninstalledTestApp,
 } from '../../../test/testFixtures';
 import reducer, {
     addDownloadableApps,
+    getAllApps,
     installDownloadableAppStarted,
     removeAppsOfSource,
     removeDownloadableAppStarted,
@@ -68,6 +70,27 @@ describe('appsReducer', () => {
             addDownloadableApps(downloadableApps),
         ]);
         expect(state.downloadableApps).toMatchObject(downloadableApps);
+    });
+
+    it('deduplicates apps with the same name and prefers installed local apps', () => {
+        const localGnssTerminal = createLocalTestApp('pc-gnss-terminal', {
+            displayName: 'GNSS Terminal',
+        });
+        const officialGnssTerminal = createUninstalledTestApp(
+            'pc-gnss-terminal',
+            {
+                displayName: 'GNSS Terminal',
+            },
+        );
+
+        const state = dispatchTo(reducer, [
+            setAllLocalApps([localGnssTerminal]),
+            addDownloadableApps([officialGnssTerminal]),
+        ]);
+
+        expect(getAllApps({ apps: state } as any)).toEqual([
+            localGnssTerminal,
+        ]);
     });
 
     it('can add downloadable apps', () => {

@@ -8,7 +8,6 @@ import { getCurrentWindow, require as remoteRequire } from '@electron/remote';
 import {
     describeError,
     ErrorDialogActions,
-    launcherConfig,
     openWindow,
     telemetry,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
@@ -23,13 +22,8 @@ import {
     type LaunchableApp,
 } from '../../../ipc/apps';
 import type { AppThunk } from '../../store';
-import appCompatibilityWarning, {
-    WarningKind,
-} from '../../util/appCompatibilityWarning';
-import { quickStartInfoWasShown } from '../settings/settingsSlice';
 import { handleSourcesWithErrors } from '../sources/sourcesEffects';
 import { EventAction } from '../telemetry/telemetryEffects';
-import { showConfirmLaunchDialog } from './appDialogsSlice';
 import {
     addDownloadableApps,
     addLocalApp,
@@ -221,10 +215,8 @@ export const removeDownloadableApp =
     };
 
 export const launch =
-    (app: LaunchableApp, setQuickStartInfoWasShown: boolean): AppThunk =>
+    (app: LaunchableApp, _setQuickStartInfoWasShown = false): AppThunk =>
     dispatch => {
-        if (setQuickStartInfoWasShown) dispatch(quickStartInfoWasShown());
-
         telemetry.sendEvent(EventAction.LAUNCH_APP, {
             appInfo: {
                 name: app.name,
@@ -236,27 +228,6 @@ export const launch =
     };
 
 export const checkCompatibilityThenLaunch =
-    (app: LaunchableApp, setQuickStartInfoWasShown = false): AppThunk =>
-    dispatch => {
-        appCompatibilityWarning(app, undefined, [WarningKind.JLINK]).then(
-            compatibilityWarning => {
-                const launchAppWithoutWarning =
-                    compatibilityWarning == null ||
-                    launcherConfig().isRunningLauncherFromSource;
-
-                if (launchAppWithoutWarning) {
-                    dispatch(launch(app, setQuickStartInfoWasShown));
-                } else {
-                    dispatch(
-                        showConfirmLaunchDialog({
-                            app,
-                            title: compatibilityWarning.title,
-                            text: compatibilityWarning.longWarning,
-                            warningData: compatibilityWarning.warningData,
-                            setQuickStartInfoWasShown,
-                        }),
-                    );
-                }
-            },
-        );
-    };
+    (app: LaunchableApp, _setQuickStartInfoWasShown = false): AppThunk =>
+    dispatch =>
+        dispatch(launch(app));

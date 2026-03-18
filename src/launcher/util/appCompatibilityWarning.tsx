@@ -197,9 +197,15 @@ export const resetJlinkCompatibilityCache = () => {
     getJlinkCompatibility.cache.clear?.();
 };
 
+const shouldCheckJLink = () => process.env.PCTOOL_DISABLE_JLINK === '0';
+
 export const checkJLinkRequirements: AppCompatibilityChecker = async (
     app: LaunchableApp,
 ) => {
+    if (!shouldCheckJLink()) {
+        return undecided;
+    }
+
     if (!isInstalled(app)) {
         return undecided;
     }
