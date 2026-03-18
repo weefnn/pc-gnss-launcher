@@ -42,10 +42,7 @@ export const installJLink = async (offlineInstall = false) => {
             return;
         }
 
-        await install(
-            installerPath,
-            inRenderer.updateJLinkProgress,
-        );
+        await install(installerPath, inRenderer.updateJLinkProgress);
     } else {
         await downloadAndInstallJLink(inRenderer.updateJLinkProgress);
     }

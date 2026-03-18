@@ -16,8 +16,7 @@ jest.mock('../../config', () => {
     const { join } = jest.requireActual('path');
     const { homedir } = jest.requireActual('os');
     return {
-        getNodeModulesDir: () =>
-            join(homedir(), '.gnss-apps', 'node_modules'),
+        getNodeModulesDir: () => join(homedir(), '.gnss-apps', 'node_modules'),
     };
 });
 

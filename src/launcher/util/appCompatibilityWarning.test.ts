@@ -148,9 +148,9 @@ describe('check compatibility of an app with the launcher', () => {
             delete process.env.PCTOOL_DISABLE_JLINK;
             jest.mocked(NrfutilSandbox.create).mockClear();
 
-            expect(await checkJLinkRequirements(app('3.0.0'), '5.0.0')).toMatchObject(
-                undecidedCheck,
-            );
+            expect(
+                await checkJLinkRequirements(app('3.0.0'), '5.0.0'),
+            ).toMatchObject(undecidedCheck);
             expect(NrfutilSandbox.create).not.toHaveBeenCalled();
         });
     });

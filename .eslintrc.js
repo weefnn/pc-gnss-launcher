@@ -12,5 +12,6 @@ module.exports = {
         ...defaultEslintrc.ignorePatterns,
         'doc/docs',
         'doc/*/docs',
+        'docs/superpowers/**',
     ],
 };

@@ -12,6 +12,7 @@ import {
     createLocalTestApp,
     createUninstalledTestApp,
 } from '../../../test/testFixtures';
+import type { RootState } from '../../store';
 import reducer, {
     addDownloadableApps,
     getAllApps,
@@ -88,7 +89,7 @@ describe('appsReducer', () => {
             addDownloadableApps([officialGnssTerminal]),
         ]);
 
-        expect(getAllApps({ apps: state } as any)).toEqual([
+        expect(getAllApps({ apps: state } as unknown as RootState)).toEqual([
             localGnssTerminal,
         ]);
     });

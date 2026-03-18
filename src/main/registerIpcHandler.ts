@@ -134,5 +134,4 @@ export default () => {
     serialPort.forRenderer.registerGetOptions(getOptions);
     serialPort.forRenderer.registerUpdate(update);
     serialPort.forRenderer.registerSet(set);
-
 };

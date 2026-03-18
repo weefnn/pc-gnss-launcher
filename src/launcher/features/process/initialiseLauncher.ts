@@ -66,4 +66,3 @@ export const startLauncherInitialisation =
 export const continueLauncherInitialisation = (): AppThunk => dispatch => {
     dispatch(runRemainingProcessStepsSequentially(currentProcessSteps));
 };
-

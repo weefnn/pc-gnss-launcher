@@ -8,10 +8,7 @@ import 'regenerator-runtime/runtime';
 
 import React from 'react';
 import { Provider } from 'react-redux';
-import {
-    logger,
-    render,
-} from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { logger, render } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { startLauncherInitialisation } from './features/process/initialiseLauncher';
 import Root from './Root';

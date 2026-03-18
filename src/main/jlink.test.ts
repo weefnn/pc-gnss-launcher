@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import fs from 'fs';
 import { installJLink as install } from '@nordicsemiconductor/nrf-jlink-js';
+import fs from 'fs';
 
 import { getUnpackedBundledResourcePath } from './config';
 import { installJLink } from './jlink';

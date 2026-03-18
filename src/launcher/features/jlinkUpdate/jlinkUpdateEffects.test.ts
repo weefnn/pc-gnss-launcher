@@ -5,7 +5,6 @@
  */
 
 import { inMain } from '../../../ipc/jlink';
-
 import { checkForJLinkUpdate } from './jlinkUpdateEffects';
 
 jest.mock('../../../ipc/jlink', () => ({

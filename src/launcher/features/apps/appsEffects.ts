@@ -216,7 +216,7 @@ export const removeDownloadableApp =
 
 export const launch =
     (app: LaunchableApp, _setQuickStartInfoWasShown = false): AppThunk =>
-    dispatch => {
+    () => {
         telemetry.sendEvent(EventAction.LAUNCH_APP, {
             appInfo: {
                 name: app.name,
