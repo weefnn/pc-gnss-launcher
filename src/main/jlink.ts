@@ -22,7 +22,7 @@ export const getJLinkState = ({ checkOnline }: { checkOnline: boolean }) =>
 const getSingleFileInFolder = (folder: string) => {
     const files = fs.readdirSync(folder);
     if (files.length !== 1) {
-        throw new Error(`Failed to find bundled J-Link installer.`);
+        return undefined;
     }
     return path.join(folder, files[0]);
 };
@@ -33,8 +33,17 @@ export const installJLink = async (offlineInstall = false) => {
             'prefetched',
             'jlink',
         );
+        if (!fs.existsSync(bundledJLinkDir)) {
+            return;
+        }
+
+        const installerPath = getSingleFileInFolder(bundledJLinkDir);
+        if (installerPath == null) {
+            return;
+        }
+
         await install(
-            getSingleFileInFolder(bundledJLinkDir),
+            installerPath,
             inRenderer.updateJLinkProgress,
         );
     } else {

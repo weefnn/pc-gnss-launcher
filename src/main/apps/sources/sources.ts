@@ -36,7 +36,7 @@ let sources: Source[] = [];
 
 const officialSource = {
     name: OFFICIAL,
-    url: 'https://files.nordicsemi.com/artifactory/swtools/external/ncd/apps/official/source.json',
+    url: 'https://github.com/weefnn/pc-gnss-terminal/releases/latest/download/source.json',
 };
 
 const saveAllSources = () => {
@@ -148,6 +148,11 @@ export const downloadAllSources = async () => {
 };
 
 export const ensureBundledSourceExists = () => {
+    const prefetchedDir = getBundledResourcePath('prefetched');
+    if (!fs.existsSync(prefetchedDir)) {
+        return;
+    }
+
     const bundledSource = getBundledResourcePath('prefetched', 'source.json');
 
     // we need to overwrite source json so if new apps are in it but not on the machine source file
@@ -158,7 +163,7 @@ export const ensureBundledSourceExists = () => {
     }
 
     const appFiles = fs
-        .readdirSync(getBundledResourcePath('prefetched'))
+        .readdirSync(prefetchedDir)
         .filter(p => p.match(/^(pc-nrfconnect-).*/));
 
     appFiles.forEach(file => {

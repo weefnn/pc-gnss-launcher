@@ -9,10 +9,13 @@ Owner: weifeng + codex
 Implementation status (V1 foundation): COMPLETE
 
 Delivered:
-- `pc-gnssconnect-terminal` initialized from `pc-nrfconnect-serial-terminal`.
+- `pc-gnss-terminal` initialized from `pc-nrfconnect-serial-terminal`.
 - Command template state and UI send flow added.
 - GNSS export filename convention (`gnss-terminal-*.txt`) implemented.
 - App quality checks (`npm run check`) and tests (`npm test`) pass.
+- GitHub release packaging path prepared:
+  - launcher defaults to GitHub app source.
+  - terminal release assets include `source.json` and app metadata JSON.
 
 Remaining before operational sign-off:
 - Manual launcher GUI smoke run on macOS.
@@ -23,7 +26,7 @@ Remaining before operational sign-off:
 We want to build our own PC tool platform by reusing the nRF Connect for Desktop architecture and tech stack.
 
 Confirmed direction:
-- Keep `pc-nrfconnect-launcher` as the platform shell.
+- Keep `pc-gnss-launcher` as the platform shell.
 - Build business tools as local apps loaded by launcher.
 - V1 business scope: serial communication foundation only (macOS first).
 - Follow Nordic open-source app patterns as closely as possible.
@@ -54,7 +57,7 @@ V1 non-goals:
 ## 3. Architecture Decision
 
 ### Decision A: Platform shape
-Use `pc-nrfconnect-launcher` as-is (or near as-is) as shell, and add our tools as local apps.
+Use `pc-gnss-launcher` as-is (or near as-is) as shell, and add our tools as local apps.
 
 Why:
 - Preserves multi-app extensibility for future PC tools.
@@ -62,7 +65,7 @@ Why:
 - Keeps close alignment with the official ecosystem model.
 
 ### Decision B: App bootstrap strategy
-Fork from `pc-nrfconnect-serial-terminal` as the direct baseline for `pc-gnssconnect-terminal`.
+Fork from `pc-nrfconnect-serial-terminal` as the direct baseline for `pc-gnss-terminal`.
 
 Why:
 - It already contains the closest serial UX and architecture.
@@ -71,7 +74,7 @@ Why:
 
 ## 4. Nordic-Style Development Conventions (Hard Constraints)
 
-For `pc-gnssconnect-terminal`, follow these conventions:
+For `pc-gnss-terminal`, follow these conventions:
 
 1. Keep package conventions:
 - `name`, `displayName`, `nrfConnectForDesktop`, `engines.nrfconnect`, `files`, scripts (`watch`, `build:*`, `check:*`, `check:app`, `nordic-publish`).
@@ -91,7 +94,7 @@ For `pc-gnssconnect-terminal`, follow these conventions:
 - Redux slice-based state with selectors and action exports.
 - Persist user settings via shared persistent store patterns where needed.
 
-## 5. V1 App Design (`pc-gnssconnect-terminal`)
+## 5. V1 App Design (`pc-gnss-terminal`)
 
 ## 5.1 UI structure
 
@@ -165,7 +168,7 @@ Post-V1 cleanup track:
 ## 8. Delivery Plan
 
 Phase 1 (V1.0 foundation):
-- Create `pc-gnssconnect-terminal` from serial-terminal baseline.
+- Create `pc-gnss-terminal` from serial-terminal baseline.
 - Rename metadata/branding to product naming.
 - Keep serial terminal flow running in launcher local app mode.
 - Add command template panel + wired send flow.
@@ -202,7 +205,6 @@ Phase 3 (V2 roadmap):
 
 ## 11. Open Items (deferred by agreement)
 
-- Private app source strategy and release pipeline.
 - Full cross-platform support (Windows later).
 - GNSS protocol decomposition for V2 (NMEA/RTCM/raw observations).
 - V2 queue:

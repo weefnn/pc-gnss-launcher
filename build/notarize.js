@@ -9,7 +9,10 @@ const { notarize } = require('@electron/notarize');
 const pkgJson = require('../package.json');
 
 exports.default = ({ electronPlatformName, appOutDir }) =>
-    electronPlatformName === 'darwin'
+    electronPlatformName === 'darwin' &&
+    process.env.APPLE_TEAM_ID &&
+    process.env.APPLE_ID &&
+    process.env.APPLE_APP_SPECIFIC_PASSWORD
         ? notarize({
               tool: 'notarytool',
               appPath: `${appOutDir}/${pkgJson.build.productName}.app`,

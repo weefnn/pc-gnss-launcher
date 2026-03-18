@@ -29,12 +29,12 @@ const logger = createLogger({
     ],
 });
 
-export const setUseChineseUpdateServer = (useChineseServer: boolean) => {
-    const autoupdateDomain = useChineseServer ? 'cn' : 'com';
-
-    autoUpdater.setFeedURL(
-        `https://files.nordicsemi.${autoupdateDomain}/artifactory/swtools/external/ncd/launcher/`,
-    );
+export const setUseChineseUpdateServer = (_useChineseServer: boolean) => {
+    autoUpdater.setFeedURL({
+        provider: 'github',
+        owner: 'weefnn',
+        repo: 'pc-gnss-launcher',
+    });
 };
 
 export const checkForUpdate = async () => {

@@ -11,7 +11,7 @@ import { OFFICIAL, type SourceName } from '../common/sources';
 import argv from './argv';
 
 const appsRootDir =
-    argv['apps-root-dir'] ?? path.join(app.getPath('home'), '.nrfconnect-apps');
+    argv['apps-root-dir'] ?? path.join(app.getPath('home'), '.gnss-apps');
 
 export const getAppsExternalDir = () => path.join(appsRootDir, 'external');
 

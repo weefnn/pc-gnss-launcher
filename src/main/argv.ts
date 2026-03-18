@@ -28,7 +28,7 @@ Launch app on startup
 Directories
 ===========
 --apps-root-dir  The directory where app data is stored.
-                 Default: "<homeDir>/.nrfconnect-apps"
+                 Default: "<homeDir>/.gnss-apps"
 --user-data-dir  Path to the user data dir. If this is not set, the environment
                  variable NRF_USER_DATA_DIR is also used.
                  See also https://www.electronjs.org/docs/api/app#appgetpathname

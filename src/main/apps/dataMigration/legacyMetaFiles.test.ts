@@ -17,7 +17,7 @@ jest.mock('../../config', () => {
     const { homedir } = jest.requireActual('os');
     return {
         getNodeModulesDir: () =>
-            join(homedir(), '.nrfconnect-apps', 'node_modules'),
+            join(homedir(), '.gnss-apps', 'node_modules'),
     };
 });
 
@@ -96,7 +96,7 @@ const officialSource = {
             installed: {
                 path: path.join(
                     os.homedir(),
-                    '.nrfconnect-apps',
+                    '.gnss-apps',
                     'node_modules',
                     'pc-nrfconnect-rssi',
                 ),

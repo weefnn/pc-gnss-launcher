@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED: Use superpowers:subagent-driven-development (if subagents available) or superpowers:executing-plans to implement this plan. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a runnable `pc-gnssconnect-terminal` local app (macOS-first) on top of Nordic app conventions, supporting serial connect/send/receive and session log export.
+**Goal:** Build a runnable `pc-gnss-terminal` local app (macOS-first) on top of Nordic app conventions, supporting serial connect/send/receive and session log export.
 
 **Architecture:** Fork `pc-nrfconnect-serial-terminal` as the baseline and keep its app composition (`App`, `deviceSelect`, `sidePanel`, `panes`, Redux slices). Add a lightweight command-template feature in app layer only, without launcher core changes. Keep launcher as shell and run the app via local-app workflow.
 
@@ -13,38 +13,38 @@
 ## File Structure And Ownership
 
 Primary workspace roots:
-- Launcher shell repo: `/Users/weifeng/Workspace/PCtool/pc-nrfconnect-launcher`
-- New app repo (to create): `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal`
+- Launcher shell repo: `/Users/weifeng/Workspace/PCtool/pc-gnss-launcher`
+- New app repo (to create): `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal`
 
 Planned files to create/modify in new app repo:
-- Create: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/features/templates/templateSlice.ts`
-- Create: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/features/templates/defaultTemplates.ts`
-- Create: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/components/Terminal/CommandTemplates.tsx`
-- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/package.json`
-- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/appReducer.ts`
-- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/components/Terminal/Main.tsx`
-- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/components/Terminal/TerminalSettings/ExportLog.tsx`
-- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/index.tsx`
+- Create: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/features/templates/templateSlice.ts`
+- Create: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/features/templates/defaultTemplates.ts`
+- Create: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/components/Terminal/CommandTemplates.tsx`
+- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/package.json`
+- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/appReducer.ts`
+- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/components/Terminal/Main.tsx`
+- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/components/Terminal/TerminalSettings/ExportLog.tsx`
+- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/index.tsx`
 
 Planned tests:
-- Create: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/features/templates/templateSlice.test.ts`
-- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/components/Terminal/Main.test.tsx` (if file absent, create it)
+- Create: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/features/templates/templateSlice.test.ts`
+- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/components/Terminal/Main.test.tsx` (if file absent, create it)
 
 Launcher-side docs/run helper:
-- Create: `/Users/weifeng/Workspace/PCtool/pc-nrfconnect-launcher/docs/superpowers/runbooks/gnss-local-app.md`
+- Create: `/Users/weifeng/Workspace/PCtool/pc-gnss-launcher/docs/superpowers/runbooks/gnss-local-app.md`
 
 ## Task 1: Bootstrap App Repository From Nordic Serial Terminal
 
 **Files:**
-- Create (repo): `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal`
-- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/package.json`
-- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/README.md`
+- Create (repo): `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal`
+- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/package.json`
+- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/README.md`
 
 - [ ] **Step 1: Clone baseline repo into workspace**
 
 Run:
 ```bash
-git clone https://github.com/NordicSemiconductor/pc-nrfconnect-serial-terminal.git /Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal
+git clone https://github.com/NordicSemiconductor/pc-nrfconnect-serial-terminal.git /Users/weifeng/Workspace/PCtool/pc-gnss-terminal
 ```
 Expected: repository cloned successfully.
 
@@ -52,7 +52,7 @@ Expected: repository cloned successfully.
 
 Run:
 ```bash
-git -C /Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal checkout -b codex/gnss-terminal-v1-foundation
+git -C /Users/weifeng/Workspace/PCtool/pc-gnss-terminal checkout -b codex/gnss-terminal-v1-foundation
 ```
 Expected: switched to new branch.
 
@@ -61,7 +61,7 @@ Expected: switched to new branch.
 Update `package.json` fields:
 ```json
 {
-  "name": "pc-gnssconnect-terminal",
+  "name": "pc-gnss-terminal",
   "displayName": "GNSS Terminal",
   "description": "Serial terminal for GNSS device communication"
 }
@@ -72,7 +72,7 @@ Also update repository/homepage if private placeholders are needed.
 
 Run:
 ```bash
-cd /Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal
+cd /Users/weifeng/Workspace/PCtool/pc-gnss-terminal
 npm install
 npm run check:app
 ```
@@ -82,20 +82,20 @@ Expected: `check-app-properties` passes.
 
 Run:
 ```bash
-git -C /Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal add package.json README.md
-git -C /Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal commit -m "chore: bootstrap GNSS terminal app from serial-terminal"
+git -C /Users/weifeng/Workspace/PCtool/pc-gnss-terminal add package.json README.md
+git -C /Users/weifeng/Workspace/PCtool/pc-gnss-terminal commit -m "chore: bootstrap GNSS terminal app from serial-terminal"
 ```
 
 ## Task 2: Wire Local-App Runbook (Launcher Integration Without Core Changes)
 
 **Files:**
-- Create: `/Users/weifeng/Workspace/PCtool/pc-nrfconnect-launcher/docs/superpowers/runbooks/gnss-local-app.md`
+- Create: `/Users/weifeng/Workspace/PCtool/pc-gnss-launcher/docs/superpowers/runbooks/gnss-local-app.md`
 
 - [ ] **Step 1: Document local app directory convention**
 
 Add runbook section with exact path:
 ```text
-~/.nrfconnect-apps/local/pc-gnssconnect-terminal
+~/.gnss-apps/local/pc-gnss-terminal
 ```
 
 - [ ] **Step 2: Document dev start commands**
@@ -103,11 +103,11 @@ Add runbook section with exact path:
 Add commands:
 ```bash
 # Terminal A: app
-cd /Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal
+cd /Users/weifeng/Workspace/PCtool/pc-gnss-terminal
 npm run watch
 
 # Terminal B: launcher
-cd /Users/weifeng/Workspace/PCtool/pc-nrfconnect-launcher
+cd /Users/weifeng/Workspace/PCtool/pc-gnss-launcher
 npm run watch:build
 npm run app
 ```
@@ -122,17 +122,17 @@ Manual check:
 
 Run:
 ```bash
-git -C /Users/weifeng/Workspace/PCtool/pc-nrfconnect-launcher add docs/superpowers/runbooks/gnss-local-app.md
-git -C /Users/weifeng/Workspace/PCtool/pc-nrfconnect-launcher commit -m "docs: add GNSS local app runbook"
+git -C /Users/weifeng/Workspace/PCtool/pc-gnss-launcher add docs/superpowers/runbooks/gnss-local-app.md
+git -C /Users/weifeng/Workspace/PCtool/pc-gnss-launcher commit -m "docs: add GNSS local app runbook"
 ```
 
 ## Task 3: Add Command Template State (TDD)
 
 **Files:**
-- Create: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/features/templates/defaultTemplates.ts`
-- Create: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/features/templates/templateSlice.ts`
-- Create: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/features/templates/templateSlice.test.ts`
-- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/appReducer.ts`
+- Create: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/features/templates/defaultTemplates.ts`
+- Create: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/features/templates/templateSlice.ts`
+- Create: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/features/templates/templateSlice.test.ts`
+- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/appReducer.ts`
 
 - [ ] **Step 1: Write failing tests for template slice**
 
@@ -155,7 +155,7 @@ it('updates selected template id', () => {
 
 Run:
 ```bash
-cd /Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal
+cd /Users/weifeng/Workspace/PCtool/pc-gnss-terminal
 npm test -- src/features/templates/templateSlice.test.ts
 ```
 Expected: FAIL because files/symbols do not exist yet.
@@ -211,9 +211,9 @@ git commit -m "feat: add command template state"
 ## Task 4: Add Template UI And Send Integration (TDD)
 
 **Files:**
-- Create: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/components/Terminal/CommandTemplates.tsx`
-- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/components/Terminal/Main.tsx`
-- Test: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/components/Terminal/Main.test.tsx`
+- Create: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/components/Terminal/CommandTemplates.tsx`
+- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/components/Terminal/Main.tsx`
+- Test: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/components/Terminal/Main.test.tsx`
 
 - [ ] **Step 1: Write failing UI behavior tests**
 
@@ -273,8 +273,8 @@ git commit -m "feat: add predefined command template send UI"
 ## Task 5: GNSS-Oriented Log Export Naming + Session Consistency
 
 **Files:**
-- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/components/Terminal/TerminalSettings/ExportLog.tsx`
-- Optional modify: `/Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal/src/components/Terminal/Terminal.tsx`
+- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/components/Terminal/TerminalSettings/ExportLog.tsx`
+- Optional modify: `/Users/weifeng/Workspace/PCtool/pc-gnss-terminal/src/components/Terminal/Terminal.tsx`
 
 - [ ] **Step 1: Write failing test for export filename prefix**
 
@@ -308,13 +308,13 @@ git commit -m "feat: rename exported log file for GNSS terminal"
 ## Task 6: End-To-End Verification On macOS
 
 **Files:**
-- Modify (if needed): `/Users/weifeng/Workspace/PCtool/pc-nrfconnect-launcher/docs/superpowers/runbooks/gnss-local-app.md`
+- Modify (if needed): `/Users/weifeng/Workspace/PCtool/pc-gnss-launcher/docs/superpowers/runbooks/gnss-local-app.md`
 
 - [ ] **Step 1: Run quality gates in app repo**
 
 Run:
 ```bash
-cd /Users/weifeng/Workspace/PCtool/pc-gnssconnect-terminal
+cd /Users/weifeng/Workspace/PCtool/pc-gnss-terminal
 npm run check
 npm test
 ```
@@ -339,14 +339,14 @@ Add a "Verification" section with date + result + known gaps.
 
 Run:
 ```bash
-git -C /Users/weifeng/Workspace/PCtool/pc-nrfconnect-launcher add docs/superpowers/runbooks/gnss-local-app.md
-git -C /Users/weifeng/Workspace/PCtool/pc-nrfconnect-launcher commit -m "docs: add GNSS terminal verification notes"
+git -C /Users/weifeng/Workspace/PCtool/pc-gnss-launcher add docs/superpowers/runbooks/gnss-local-app.md
+git -C /Users/weifeng/Workspace/PCtool/pc-gnss-launcher commit -m "docs: add GNSS terminal verification notes"
 ```
 
 ## Task 7: Handoff And Next Iteration Setup
 
 **Files:**
-- Modify: `/Users/weifeng/Workspace/PCtool/pc-nrfconnect-launcher/docs/superpowers/specs/2026-03-17-gnss-platform-v1-design.md`
+- Modify: `/Users/weifeng/Workspace/PCtool/pc-gnss-launcher/docs/superpowers/specs/2026-03-17-gnss-platform-v1-design.md`
 
 - [ ] **Step 1: Mark V1 scope delivered in spec**
 
@@ -363,14 +363,14 @@ Add explicit backlog bullets under open items.
 
 Run:
 ```bash
-git -C /Users/weifeng/Workspace/PCtool/pc-nrfconnect-launcher add docs/superpowers/specs/2026-03-17-gnss-platform-v1-design.md
-git -C /Users/weifeng/Workspace/PCtool/pc-nrfconnect-launcher commit -m "docs: update GNSS V1 spec implementation status"
+git -C /Users/weifeng/Workspace/PCtool/pc-gnss-launcher add docs/superpowers/specs/2026-03-17-gnss-platform-v1-design.md
+git -C /Users/weifeng/Workspace/PCtool/pc-gnss-launcher commit -m "docs: update GNSS V1 spec implementation status"
 ```
 
 ## Definition Of Done
 
 V1 is complete only when all are true:
-- `pc-gnssconnect-terminal` builds and runs from launcher local apps flow.
+- `pc-gnss-terminal` builds and runs from launcher local apps flow.
 - Serial connect/send/receive works on macOS.
 - Predefined templates and manual input both trigger command send.
 - Session logs export to local file with GNSS naming.
