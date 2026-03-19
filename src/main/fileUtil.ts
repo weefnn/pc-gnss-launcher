@@ -52,9 +52,7 @@ export const readSchemedJsonFile = <T extends z.ZodTypeAny>(
 };
 
 const isMissingFileError = (error: unknown) =>
-    error instanceof Error &&
-    'code' in error &&
-    error.code === 'ENOENT';
+    error instanceof Error && 'code' in error && error.code === 'ENOENT';
 
 const cleanupBrokenSymlink = (filePath: string) => {
     try {

@@ -41,9 +41,13 @@ describe('listDirectories', () => {
                 isDirectory: () => true,
             } as unknown as ReturnType<typeof fs.statSync>;
         });
-        jest.mocked(fs.lstatSync).mockImplementation(path => ({
-            isSymbolicLink: () => path === '/apps/local/pc-gnss-terminal',
-        }));
+        jest.mocked(fs.lstatSync).mockImplementation(
+            path =>
+                ({
+                    isSymbolicLink: () =>
+                        path === '/apps/local/pc-gnss-terminal',
+                }) as unknown as ReturnType<typeof fs.lstatSync>,
+        );
 
         let result: string[] = [];
         expect(() => {
