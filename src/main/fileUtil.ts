@@ -51,10 +51,40 @@ export const readSchemedJsonFile = <T extends z.ZodTypeAny>(
     }
 };
 
-const isDirectory = (dirPath: string) => (file: string) => {
-    const fileStats = fs.statSync(path.join(dirPath, file));
+const isMissingFileError = (error: unknown) =>
+    error instanceof Error &&
+    'code' in error &&
+    error.code === 'ENOENT';
 
-    return fileStats.isDirectory() && !file.startsWith('.');
+const cleanupBrokenSymlink = (filePath: string) => {
+    try {
+        if (fs.lstatSync(filePath).isSymbolicLink()) {
+            fs.unlinkSync(filePath);
+        }
+    } catch (error) {
+        if (!isMissingFileError(error)) {
+            throw error;
+        }
+    }
+};
+
+const safeStatSync = (filePath: string) => {
+    try {
+        return fs.statSync(filePath);
+    } catch (error) {
+        if (isMissingFileError(error)) {
+            cleanupBrokenSymlink(filePath);
+            return undefined;
+        }
+
+        throw error;
+    }
+};
+
+const isDirectory = (dirPath: string) => (file: string) => {
+    const fileStats = safeStatSync(path.join(dirPath, file));
+
+    return fileStats?.isDirectory() === true && !file.startsWith('.');
 };
 
 export const listDirectories = (dirPath: string): string[] =>
@@ -63,8 +93,8 @@ export const listDirectories = (dirPath: string): string[] =>
         : fs.readdirSync(dirPath).filter(isDirectory(dirPath));
 
 const isFile = (dirPath: string, file: string) => {
-    const fileStats = fs.statSync(path.join(dirPath, file));
-    return fileStats.isFile();
+    const fileStats = safeStatSync(path.join(dirPath, file));
+    return fileStats?.isFile() === true;
 };
 
 export const listFiles = (dirPath: string, filterRegex: RegExp) =>
